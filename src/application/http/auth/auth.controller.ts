@@ -11,11 +11,14 @@ import { AuthRefreshResponse } from '@applications/http/auth/response/auth-refre
 import { AuthGuard } from '@applications/guards/auth.guard';
 import { ReqToken } from '@applications/decorators/req-token.decorator';
 import { ReqUser } from '@applications/decorators/req-user.decorator';
+import { ApiResponse, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('auth')
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
+  @ApiResponse({ type: AuthSignInResponse })
   @Post('/sign-in')
   async signIn(@Body() body: AuthSignInDto) {
     const res = await this.authService.signIn({
@@ -25,6 +28,7 @@ export class AuthController {
     return new AuthSignInResponse(res);
   }
 
+  @ApiResponse({ type: AuthSignUpResponse })
   @Post('/sign-up')
   async signUp(@Body() body: AuthSignUpDto) {
     const res = await this.authService.signUpByEmailAndPassword({
@@ -44,6 +48,7 @@ export class AuthController {
     });
   }
 
+  @ApiResponse({ type: AuthRefreshResponse })
   @UseGuards(AuthGuard)
   @Post('/refresh')
   async refresh(@Body() body: AuthRefreshDto, @ReqUser() user: UserEntity) {

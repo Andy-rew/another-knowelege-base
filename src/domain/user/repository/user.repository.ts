@@ -2,7 +2,6 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { UserEntity } from '@domain/user/entities/user.entity';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
-import { UserAuthTokensRepository } from '@domain/user/repository/user-auth-tokens.repository';
 import { UserAuthTokensEntity } from '@domain/user/entities/user-auth-tokens.entity';
 
 @Injectable()
@@ -16,10 +15,6 @@ export class UserRepository {
     return await this.repo.save(dto);
   }
 
-  async deleteUser(user: UserEntity): Promise<void> {
-    await this.repo.delete(user.id);
-  }
-
   async findByEmail(email: string): Promise<UserEntity | null> {
     return this.repo
       .createQueryBuilder('user')
@@ -31,7 +26,22 @@ export class UserRepository {
   async findByEmailOrFail(email: string): Promise<UserEntity> {
     const user = await this.findByEmail(email);
     if (!user) {
-      throw new NotFoundException('Incorrect email or password');
+      throw new NotFoundException('User not found');
+    }
+    return user;
+  }
+
+  async findById(id: number): Promise<UserEntity | null> {
+    return this.repo
+      .createQueryBuilder('user')
+      .where('user.id = :id', { id })
+      .getOne();
+  }
+
+  async findByIdOrFail(id: number): Promise<UserEntity> {
+    const user = await this.findById(id);
+    if (!user) {
+      throw new NotFoundException('User not found');
     }
     return user;
   }

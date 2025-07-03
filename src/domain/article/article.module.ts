@@ -4,8 +4,10 @@ import { ArticleRepository } from '@domain/article/repositories/article.reposito
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ArticleEntity } from '@domain/article/entities/article.entity';
 import { ArticleManager } from '@domain/article/managers/article.manager';
+import { ArticlesController } from '@applications/http/articles/articles.controller';
 
 @Module({
+  controllers: [ArticlesController],
   imports: [TypeOrmModule.forFeature([ArticleEntity])],
   providers: [ArticleService, ArticleRepository, ArticleManager],
   exports: [ArticleRepository],
