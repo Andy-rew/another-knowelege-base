@@ -28,23 +28,23 @@ export class ArticleRepository {
       .getOne();
   }
 
-  async findOne(article: ArticleEntity): Promise<ArticleEntity> {
+  async findOne(id: number): Promise<ArticleEntity> {
     return this.repo
       .createQueryBuilder('article')
       .leftJoinAndSelect('article.tags', 'tags')
-      .where('article.id = :article_id', { article_id: article.id })
+      .where('article.id = :article_id', { article_id: id })
       .getOne();
   }
 
-  async findOneOrFail(article: ArticleEntity): Promise<ArticleEntity> {
-    const articleForRes = await this.findOne(article);
+  async findOneOrFail(id: number): Promise<ArticleEntity> {
+    const articleForRes = await this.findOne(id);
     if (!articleForRes) {
       throw new NotFoundException('Article not found');
     }
     return articleForRes;
   }
 
-  async findAllWithFilters(dto?: {
+  async findAllWithFilters(dto: {
     limit: number;
     offset: number;
     tagIds?: number[];

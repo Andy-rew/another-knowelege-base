@@ -17,6 +17,6 @@ import { UserModule } from '@domain/user/user.module';
     UserModule,
   ],
   providers: [TagService, TagRepository],
-  exports: [TagService],
+  exports: [TagService, TagRepository],
 })
 export class TagModule {}

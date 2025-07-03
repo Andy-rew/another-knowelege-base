@@ -31,4 +31,12 @@ export class TagRepository {
 
     return tags;
   }
+
+  async findAllPaginated(dto: { limit: number; offset: number }) {
+    return this.repo
+      .createQueryBuilder('tags')
+      .limit(dto.limit)
+      .offset(dto.offset)
+      .getManyAndCount();
+  }
 }

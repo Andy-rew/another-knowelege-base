@@ -25,7 +25,7 @@ export class ArticleService {
     return this.articleRepository.save(article);
   }
 
-  async update(dto: {
+  async edit(dto: {
     article: ArticleEntity;
     title: string;
     summary: string;
