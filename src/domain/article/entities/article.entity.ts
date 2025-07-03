@@ -5,12 +5,16 @@ import {
   Entity,
   JoinTable,
   ManyToMany,
+  PrimaryGeneratedColumn,
 } from 'typeorm';
 import { ArticleTypeEnum } from '@domain/article/types/article-type.enum';
-import { TagEntity } from '@domain/tag/tag.entity';
+import { TagEntity } from '@domain/tag/entities/tag.entity';
 
 @Entity()
 export class ArticleEntity {
+  @PrimaryGeneratedColumn()
+  id: number;
+
   @Column({ type: 'text' })
   title: string;
 

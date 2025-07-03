@@ -4,12 +4,16 @@ import {
   DeleteDateColumn,
   Entity,
   OneToMany,
+  PrimaryGeneratedColumn,
 } from 'typeorm';
 import { IsEmail } from 'class-validator';
-import { UserAuthTokensEntity } from '@domain/user/user-auth-tokens.entity';
+import { UserAuthTokensEntity } from '@domain/user/entities/user-auth-tokens.entity';
 
 @Entity()
 export class UserEntity {
+  @PrimaryGeneratedColumn()
+  id: number;
+
   @Column()
   name: string;
 

@@ -1,5 +1,5 @@
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
-import { UserEntity } from '@domain/user/user.entity';
+import { UserEntity } from '@domain/user/entities/user.entity';
 
 @Entity('user_auth_tokens')
 export class UserAuthTokensEntity {

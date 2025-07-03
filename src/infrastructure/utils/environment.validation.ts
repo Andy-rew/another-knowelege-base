@@ -40,6 +40,9 @@ class EnvironmentVariables {
 
   @IsNumber({}, { message: 'JWT_REFRESH_EXPIRE_TIME_MINUTES must be a number' })
   JWT_REFRESH_EXPIRE_TIME_MINUTES: number;
+
+  @IsNumber({}, { message: 'PASSWORD_LENGTH must be a number' })
+  PASSWORD_LENGTH: number;
 }
 
 export const validateEnv = async (config: Record<string, unknown>) => {
