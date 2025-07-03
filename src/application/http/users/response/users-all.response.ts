@@ -1,6 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { UserEntity } from '@domain/user/entities/user.entity';
-import { Type } from 'class-transformer';
 
 class UserAllUserItem {
   @ApiProperty()

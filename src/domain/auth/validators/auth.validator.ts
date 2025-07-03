@@ -2,7 +2,6 @@ import { BadRequestException, Inject, Injectable } from '@nestjs/common';
 import { UserEntity } from '@domain/user/entities/user.entity';
 import { CommonAuthPayload } from '@domain/auth/types/common-auth-payload';
 import { JwtService } from '@nestjs/jwt';
-import * as dayjs from 'dayjs';
 import { ConfigService } from '@nestjs/config';
 import { Application, CONFIGS } from '@infrastructure/types/configuration';
 

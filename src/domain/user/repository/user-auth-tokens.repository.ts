@@ -5,9 +5,14 @@ import { Repository } from 'typeorm';
 
 @Injectable()
 export class UserAuthTokensRepository {
-  constructor(@InjectRepository(UserAuthTokensEntity) private readonly repo: Repository<UserAuthTokensEntity>) {}
+  constructor(
+    @InjectRepository(UserAuthTokensEntity)
+    private readonly repo: Repository<UserAuthTokensEntity>,
+  ) {}
 
-  async save(userAuthToken: UserAuthTokensEntity): Promise<UserAuthTokensEntity> {
+  async save(
+    userAuthToken: UserAuthTokensEntity,
+  ): Promise<UserAuthTokensEntity> {
     return this.repo.save(userAuthToken);
   }
 
@@ -32,14 +37,20 @@ export class UserAuthTokensRepository {
     return userToken;
   }
 
-  async findByAccessTokenAndUserId(dto: { accessToken: string; userId: number }): Promise<UserAuthTokensEntity | null> {
+  async findByAccessTokenAndUserId(dto: {
+    accessToken: string;
+    userId: number;
+  }): Promise<UserAuthTokensEntity | null> {
     return this.repo.findOne({
       where: { accessToken: dto.accessToken, user: { id: dto.userId } },
       relations: { user: true },
     });
   }
 
-  async findByAccessTokenAndUserIdOrFail(dto: { accessToken: string; userId: number }): Promise<UserAuthTokensEntity> {
+  async findByAccessTokenAndUserIdOrFail(dto: {
+    accessToken: string;
+    userId: number;
+  }): Promise<UserAuthTokensEntity> {
     const userToken = this.findByAccessTokenAndUserId(dto);
     if (!userToken) {
       throw new NotFoundException('User auth token not found');
@@ -47,7 +58,13 @@ export class UserAuthTokensRepository {
     return userToken;
   }
 
-  async deleteByAccessTokenAndUserId(dto: { accessToken: string; userId: number }) {
-    return this.repo.delete({ accessToken: dto.accessToken, user: { id: dto.userId } });
+  async deleteByAccessTokenAndUserId(dto: {
+    accessToken: string;
+    userId: number;
+  }) {
+    return this.repo.delete({
+      accessToken: dto.accessToken,
+      user: { id: dto.userId },
+    });
   }
 }

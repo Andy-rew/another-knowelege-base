@@ -37,7 +37,7 @@ export class TagsController {
   @Post('/:id/delete')
   public async delete(@Param() params: TagDeleteParamsDto) {
     const tags = await this.tagsRepository.findManyByIdsOrFail([params.id]);
-    const res = await this.tagService.delete(tags[0]);
+    await this.tagService.delete(tags[0]);
   }
 
   @ApiResponse({ type: GetAllTagsResponse })
