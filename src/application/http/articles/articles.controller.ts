@@ -1,16 +1,6 @@
-import {
-  Body,
-  Controller,
-  Get,
-  Param,
-  Post,
-  Put,
-  Query,
-  UseGuards,
-} from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Put, Query } from '@nestjs/common';
 import { ArticleService } from '@domain/article/services/article.service';
 import { CreateArticleDto } from '@applications/http/articles/request/create-article.dto';
-import { AuthGuard } from '@applications/guards/auth.guard';
 import { ApiResponse } from '@nestjs/swagger';
 import { CreateArticleResponse } from '@applications/http/articles/response/create-article.response';
 import { EditArticleDto } from '@applications/http/articles/request/edit-article.dto';
@@ -25,6 +15,7 @@ import { GetAllArticlesResponse } from '@applications/http/articles/response/get
 import { GetAllArticlesNonAuthResponse } from '@applications/http/articles/response/get-all-articles-non-auth.response';
 import { GetAllArticlesNonAuthQueryDto } from '@applications/http/articles/request/get-all-articles-non-auth-query.dto';
 import { ArticleTypeEnum } from '@domain/article/types/article-type.enum';
+import { Auth } from '@applications/decorators/auth.decorator';
 
 @Controller('articles')
 export class ArticlesController {
@@ -35,7 +26,7 @@ export class ArticlesController {
   ) {}
 
   @ApiResponse({ type: CreateArticleResponse })
-  @UseGuards(AuthGuard)
+  @Auth()
   @Post('/create')
   async create(@Body() body: CreateArticleDto) {
     const res = await this.articleService.create({
@@ -47,7 +38,7 @@ export class ArticlesController {
     return new CreateArticleResponse(res);
   }
 
-  @UseGuards(AuthGuard)
+  @Auth()
   @Put('/:id/edit')
   async edit(
     @Body() body: EditArticleDto,
@@ -62,7 +53,7 @@ export class ArticlesController {
     });
   }
 
-  @UseGuards(AuthGuard)
+  @Auth()
   @Put('/:id/edit/tags')
   async editTags(
     @Body() body: EditArticleTagsDto,
@@ -73,7 +64,7 @@ export class ArticlesController {
     await this.articleService.editTags({ tags: tags, article: article });
   }
 
-  @UseGuards(AuthGuard)
+  @Auth()
   @Put('/:id/delete')
   async delete(@Param() param: DeleteArticleParamsDto) {
     const article = await this.articleRepository.findOneOrFail(param.id);
@@ -81,11 +72,14 @@ export class ArticlesController {
   }
 
   @ApiResponse({ type: GetAllArticlesResponse })
-  @UseGuards(AuthGuard)
+  @Auth()
   @Get('/all')
   async getAll(@Query() query: GetAllArticlesQueryDto) {
     // требуется уточнение сколько может быть тэгов в рамках одной статьи
     // если неограниченное количество или достаточно много, то необходимо сделать пагинацию и по ним
+    if (query.tagIds) {
+      await this.tagRepository.findManyByIdsOrFail(query.tagIds);
+    }
     const [articles, count] = await this.articleRepository.findAllWithFilters({
       limit: query.limit,
       offset: query.offset,
@@ -101,6 +95,9 @@ export class ArticlesController {
   async getAllNonAuth(@Query() query: GetAllArticlesNonAuthQueryDto) {
     // требуется уточнение сколько может быть тэгов в рамках одной статьи
     // если неограниченное количество или достаточно много, то необходимо сделать пагинацию и по ним
+    if (query.tagIds) {
+      await this.tagRepository.findManyByIdsOrFail(query.tagIds);
+    }
     const [articles, count] = await this.articleRepository.findAllWithFilters({
       limit: query.limit,
       offset: query.offset,

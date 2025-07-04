@@ -59,7 +59,7 @@ export class ArticleRepository {
     }
 
     if (dto.tagIds && dto.tagIds.length > 0) {
-      query.andWhere('tags.id IN (:...tag_ids)', { tagIds: dto.tagIds });
+      query.andWhere('tags.id IN (:...tag_ids)', { tag_ids: dto.tagIds });
     }
 
     return query.limit(dto.limit).offset(dto.offset).getManyAndCount();

@@ -1,4 +1,4 @@
-import { Body, Controller, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Post } from '@nestjs/common';
 import { AuthService } from '@domain/auth/services/auth.service';
 import { AuthSignInDto } from '@applications/http/auth/request/auth-sign-in.dto';
 import { AuthSignInResponse } from '@applications/http/auth/response/auth-sign-in.response';
@@ -8,10 +8,10 @@ import { UserAuthTokensEntity } from '@domain/user/entities/user-auth-tokens.ent
 import { AuthRefreshDto } from '@applications/http/auth/request/auth-refresh.dto';
 import { UserEntity } from '@domain/user/entities/user.entity';
 import { AuthRefreshResponse } from '@applications/http/auth/response/auth-refresh.response';
-import { AuthGuard } from '@applications/guards/auth.guard';
 import { ReqToken } from '@applications/decorators/req-token.decorator';
 import { ReqUser } from '@applications/decorators/req-user.decorator';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
+import { Auth } from '@applications/decorators/auth.decorator';
 
 @ApiTags('auth')
 @Controller('auth')
@@ -33,13 +33,14 @@ export class AuthController {
   async signUp(@Body() body: AuthSignUpDto) {
     const res = await this.authService.signUpByEmailAndPassword({
       email: body.email,
+      name: body.name,
       samePassword: body.samePassword,
       password: body.password,
     });
     return new AuthSignUpResponse(res);
   }
 
-  @UseGuards(AuthGuard)
+  @Auth()
   @Post('/sign-out')
   async signOut(@ReqToken() token: UserAuthTokensEntity) {
     await this.authService.signOut({
@@ -49,7 +50,7 @@ export class AuthController {
   }
 
   @ApiResponse({ type: AuthRefreshResponse })
-  @UseGuards(AuthGuard)
+  @Auth()
   @Post('/refresh')
   async refresh(@Body() body: AuthRefreshDto, @ReqUser() user: UserEntity) {
     const res = await this.authService.refreshTokens({

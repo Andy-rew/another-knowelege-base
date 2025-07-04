@@ -43,12 +43,15 @@ export class AuthService {
 
   async signUpByEmailAndPassword(dto: {
     email: string;
+    name: string;
     password: string;
     samePassword: string;
   }): Promise<UserEntity> {
-    const user: UserEntity = await this.userRepository.findByEmailOrFail(
+    const existUser: UserEntity = await this.userRepository.findByEmail(
       dto.email,
     );
+
+    const user = existUser ?? new UserEntity();
 
     this.authValidator.validateUserActivationCodeSignUp({
       password: dto.password,
@@ -61,6 +64,7 @@ export class AuthService {
 
     const userPasswordEntity = this.authManager.createUserSignUpEntity({
       user: user,
+      name: dto.name,
       email: dto.email,
       hashedPassword: hashedPassword,
     });

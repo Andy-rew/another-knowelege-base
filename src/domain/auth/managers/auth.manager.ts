@@ -29,11 +29,14 @@ export class AuthManager {
 
   createUserSignUpEntity(dto: {
     user: UserEntity;
+    name: string;
     email: string;
     hashedPassword: string;
   }): UserEntity {
     const user = dto.user;
     user.password = dto.hashedPassword;
+    user.email = dto.email;
+    user.name = dto.name;
     user.deletedAt = null;
     return user;
   }

@@ -6,6 +6,10 @@ export class AuthSignUpDto {
   @IsEmail()
   email: string;
 
+  @ApiProperty({ description: 'Имя' })
+  @IsString()
+  name: string;
+
   @ApiProperty({ description: 'Пароль', minLength: 6, maxLength: 50 })
   @IsString()
   password: string;

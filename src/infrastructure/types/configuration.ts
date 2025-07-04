@@ -3,6 +3,8 @@ import * as process from 'process';
 
 dotenv.config();
 
+export const accessTokenTitle = 'accessToken';
+
 export type JwtAccessConfig = {
   accessSecret: string;
   accessExpireTimeMinutes: string;

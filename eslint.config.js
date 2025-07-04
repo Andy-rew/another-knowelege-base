@@ -41,6 +41,7 @@ module.exports = [
       'unused-imports/no-unused-imports': 'error',
       '@typescript-eslint/no-unused-vars': 'off',
       'no-unused-vars': 'off',
+      'no-undef': 'off',
     },
   },
 ];
