@@ -21,6 +21,7 @@ export class AuthServiceTest extends BaseTestClass {
       AuthService,
     ).signUpByEmailAndPassword({
       email: user.email,
+      name: user.name,
       password: dto.password,
       samePassword: dto.password,
     });
@@ -46,6 +47,7 @@ export class AuthServiceTest extends BaseTestClass {
 
     const res = await this.getService(AuthService).signUpByEmailAndPassword({
       email: user.email,
+      name: user.name,
       password: password,
       samePassword: password,
     });
