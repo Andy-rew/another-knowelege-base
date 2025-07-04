@@ -5,7 +5,7 @@
 - Склонировать репозиторий
 - Скопировать тестовые значения из `.env.example` в `.env` (при необходимости можно указать свои)
 - Выполнить команду `docker-compose up -d`
-- После запуска приложения выполнить `docker exec another-knowelege bash -c "npm run migration:run"`
+- После запуска приложения выполнить `docker exec another-knowelege /bin/sh -c "npm run migration:run"`
 - Приложение будет доступно по адресу `http://localhost:3007`
 - Документация **Swagger** будет по адресу `http://localhost:3007/api`
 
