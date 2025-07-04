@@ -1,0 +1,61 @@
+import { plainToClass } from 'class-transformer';
+import { IsNumber, IsString, validate } from 'class-validator';
+
+class EnvironmentVariables {
+  @IsString({ message: 'HOST must be a string' })
+  HOST: string;
+
+  @IsNumber({}, { message: 'PORT must be a number' })
+  PORT: number;
+
+  @IsString({ message: 'ENVIRONMENT_NAME must be a string' })
+  ENVIRONMENT_NAME: string;
+
+  @IsString({ message: 'DB_TYPE must be a string' })
+  DB_TYPE: string;
+
+  @IsString({ message: 'DB_HOST must be a string' })
+  DB_HOST: string;
+
+  @IsNumber({}, { message: 'DB_PORT must be a number' })
+  DB_PORT: number;
+
+  @IsString({ message: 'POSTGRES_USERNAME must be a string' })
+  POSTGRES_USERNAME: string;
+
+  @IsString({ message: 'POSTGRES_PASSWORD must be a string' })
+  POSTGRES_PASSWORD: string;
+
+  @IsString({ message: 'POSTGRES_DATABASE must be a string' })
+  POSTGRES_DATABASE: string;
+
+  @IsString({ message: 'JWT_ACCESS_SECRET_KEY must be a string' })
+  JWT_ACCESS_SECRET_KEY: string;
+
+  @IsNumber({}, { message: 'JWT_ACCESS_EXPIRE_TIME_MINUTES must be a number' })
+  JWT_ACCESS_EXPIRE_TIME_MINUTES: number;
+
+  @IsString({ message: 'JWT_REFRESH_SECRET_KEY must be a string' })
+  JWT_REFRESH_SECRET_KEY: string;
+
+  @IsNumber({}, { message: 'JWT_REFRESH_EXPIRE_TIME_MINUTES must be a number' })
+  JWT_REFRESH_EXPIRE_TIME_MINUTES: number;
+
+  @IsNumber({}, { message: 'PASSWORD_LENGTH must be a number' })
+  PASSWORD_LENGTH: number;
+}
+
+export const validateEnv = async (config: Record<string, unknown>) => {
+  const validatedConfig = plainToClass(EnvironmentVariables, config, {
+    enableImplicitConversion: true,
+  });
+
+  const errors = await validate(validatedConfig, {
+    skipMissingProperties: false,
+  });
+
+  if (errors.length > 0) {
+    throw new Error(errors.toString());
+  }
+  return validatedConfig;
+};
